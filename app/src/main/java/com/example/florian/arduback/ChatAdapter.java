@@ -21,7 +21,6 @@ public class ChatAdapter extends ArrayAdapter<ChatMessage> {
         @BindView(R.id.time_text_view) TextView time;
         @BindView(R.id.device_text_view) TextView device;
         @BindView(R.id.message_text_view) TextView message;
-        //TextView time = (TextView) getActivity().findViewById(R.id.time_text_view);
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

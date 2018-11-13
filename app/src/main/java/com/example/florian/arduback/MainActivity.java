@@ -1,5 +1,7 @@
 package com.example.florian.arduback;
 
+import android.Manifest;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.bluetooth.BluetoothAdapter;
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
 
     @OnClick(R.id.search_button) void search() {
-
         if (bluetoothAdapter.isEnabled()) {
             // Bluetooth enabled
             startSearching();
@@ -165,9 +166,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startSearching() {
+        int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+
         if (bluetoothAdapter.startDiscovery()) {
             toolbarProgressCircle.setVisibility(View.VISIBLE);
             setStatus("Searching for devices");
+
         } else {
             setStatus("Error");
             Snackbar.make(coordinatorLayout, "Failed to start searching", Snackbar.LENGTH_INDEFINITE)

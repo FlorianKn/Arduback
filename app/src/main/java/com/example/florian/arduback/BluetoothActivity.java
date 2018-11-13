@@ -35,6 +35,7 @@ import android.widget.TextView;
 import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -184,7 +185,6 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-
     private static class myHandler extends Handler {
         private final WeakReference<BluetoothActivity> mActivity;
 
@@ -316,12 +316,10 @@ public class BluetoothActivity extends AppCompatActivity {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF:
-                        //snackTurnOn.show();
-                        System.out.println("Snack");
+                        snackTurnOn.show();
                         break;
                     case BluetoothAdapter.STATE_TURNING_ON:
-                        //if (snackTurnOn.isShownOrQueued()) snackTurnOn.dismiss();
-                        System.out.println("Snack");
+                        if (snackTurnOn.isShownOrQueued()) snackTurnOn.dismiss();
                         break;
                     case BluetoothAdapter.STATE_ON:
                         reconnect();
@@ -347,3 +345,4 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
 }
+

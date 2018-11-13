@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.florian.arduback.MainActivity"
-    android:id="@+id/coordinator_layout_main">
+    android:id="@+id/coordinator_layout_main"
+    android:fitsSystemWindows="true"
+    tools:context=".MainActivity">
+    <!--tools:context="com.example.florian.arduback.MainActivity"-->
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
