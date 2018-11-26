@@ -232,6 +232,7 @@ public class BluetoothActivity extends AppCompatActivity {
                     String readMessage = (String) msg.obj;
 
                     if (readMessage != null && activity.showMessagesIsChecked) {
+                        MainActivity.writer.writeToFile(readMessage);
                         ChatMessage messageRead = new ChatMessage(activity.device.getName(), readMessage.trim());
                         activity.addMessageToAdapter(messageRead);
 
