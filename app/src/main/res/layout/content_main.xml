@@ -27,9 +27,4 @@
         android:id="@+id/devices_list_view"/>
 
     <include layout="@layout/empty_list_item" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/plotGraph_button"
-        android:text="History"/>
 </LinearLayout>

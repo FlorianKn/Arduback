@@ -24,6 +24,8 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.FileOutputStream;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -55,10 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
             enableBluetooth();
         }
-    }
-
-    @OnClick(R.id.plotGraph_button) void plotGraph() {
-        writer.readFile();
     }
 
     private void enableBluetooth() {

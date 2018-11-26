@@ -32,7 +32,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -66,6 +73,8 @@ public class BluetoothActivity extends AppCompatActivity {
 
     Snackbar snackTurnOn;
 
+    private static ArrayList<String> receivedVals = new ArrayList();
+
     private boolean showMessagesIsChecked = true;
     private boolean autoScrollIsChecked = true;
     public static boolean showTimeIsChecked = true;
@@ -75,11 +84,19 @@ public class BluetoothActivity extends AppCompatActivity {
         String message = editText.getText().toString();
         if (message.trim().length() == 0) {
             editText.setError("Enter text first");
+            writeToFile("Bitte");
         } else {
             sendMessage(message);
             editText.setText("");
         }
     }
+    @OnClick(R.id.history) void history() {
+        for(int i = 0; i < receivedVals.size(); i++ ) {
+            writeToFile(receivedVals.get(i));
+        }
+        readFile();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +202,7 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
+
     private static class myHandler extends Handler {
         private final WeakReference<BluetoothActivity> mActivity;
 
@@ -232,7 +250,7 @@ public class BluetoothActivity extends AppCompatActivity {
                     String readMessage = (String) msg.obj;
 
                     if (readMessage != null && activity.showMessagesIsChecked) {
-                        MainActivity.writer.writeToFile(readMessage);
+                        receivedVals.add(readMessage);
                         ChatMessage messageRead = new ChatMessage(activity.device.getName(), readMessage.trim());
                         activity.addMessageToAdapter(messageRead);
 
@@ -307,6 +325,40 @@ public class BluetoothActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void writeToFile(String data){
+// Create a file in the Internal Storage
+
+        String fileName = "history";
+
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = openFileOutput(fileName, Context.MODE_APPEND);
+            outputStream.write(data.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readFile(){
+        BufferedReader input = null;
+        File file = null;
+        try {
+            file = new File(getFilesDir(), "history"); // Pass getFilesDir() and "MyFile" to read file
+            ArrayList<String> content = new ArrayList<String>();
+            input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+            String line;
+            StringBuffer buffer = new StringBuffer();
+            while ((line = input.readLine()) != null) {
+                content.add(line);
+            }
+            System.out.println(content);
+            System.out.println(content.size());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {

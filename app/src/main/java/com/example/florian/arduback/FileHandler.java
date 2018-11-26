@@ -20,6 +20,20 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import android.os.Environment;
 
+import android.os.Bundle;
+import android.app.Activity;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import android.widget.Toast;
+
+import static android.content.Context.MODE_PRIVATE;
+import static android.content.Context.SYSTEM_HEALTH_SERVICE;
+
 /**
  * Created by Florian on 26.11.2018.
  */
@@ -29,15 +43,16 @@ public class FileHandler {
     private String filepath = "";
     File myExternalFile;
 
-    public void init (Context mContext) {
+    public void init(Context mContext) {
         this.ctx = mContext;
     }
 
     public FileHandler() {
 
     }
+}
 
-    public void readFile() {
+    /*public void readFile() {
 
         StringBuilder text = new StringBuilder();
         ArrayList<String> content = new ArrayList<String>();
@@ -83,23 +98,6 @@ public class FileHandler {
 
 
 
-    public void writeToFile(String data){
-        File file = new File(ctx.getFilesDir(),"Arduback");
-        if(!file.exists()){
-            file.mkdir();
-        }
-        filepath = file.getAbsolutePath();
 
-        try{
-            File gpxfile = new File(file, "history");
-            FileWriter writer = new FileWriter(gpxfile);
-            writer.append(data);
-            writer.flush();
-            writer.close();
-        }catch (Exception e){
-            e.printStackTrace();
-
-        }
-    }
-}
+}*/
 
