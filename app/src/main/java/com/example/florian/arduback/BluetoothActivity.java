@@ -74,6 +74,7 @@ public class BluetoothActivity extends AppCompatActivity {
     Snackbar snackTurnOn;
 
     private static ArrayList<String> receivedVals = new ArrayList();
+    public static  ArrayList<String> historyContent= new ArrayList();
 
     private boolean showMessagesIsChecked = true;
     private boolean autoScrollIsChecked = true;
@@ -95,7 +96,11 @@ public class BluetoothActivity extends AppCompatActivity {
         }
         // Clear array otherwise values would be added twice
         receivedVals.clear();
-        readFile();
+        historyContent = readFile();
+        System.out.println(historyContent);
+        Intent intent = new Intent(this, HistoryActivity.class);
+        startActivity(intent);
+
     }
 
 
@@ -343,7 +348,7 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-    public void readFile(){
+    public ArrayList<String> readFile(){
         BufferedReader input = null;
         File file = null;
         try {
@@ -355,11 +360,11 @@ public class BluetoothActivity extends AppCompatActivity {
             while ((line = input.readLine()) != null) {
                 content.add(line);
             }
-            System.out.println(content);
-            System.out.println(content.size());
+            return content;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
