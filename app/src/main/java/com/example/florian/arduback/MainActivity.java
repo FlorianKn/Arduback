@@ -32,7 +32,6 @@ import butterknife.OnItemClick;
 public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter bluetoothAdapter;
-
     BluetoothDevicesAdapter bluetoothDevicesAdapter;
 
     @BindView(R.id.toolbar)

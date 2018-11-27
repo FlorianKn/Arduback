@@ -44,18 +44,13 @@ void setup() {
 
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
-  mySerial.println("Hello, world?");
 }
 
 void loop() { // run over and over
   if (mySerial.available()) {
     Serial.println(mySerial.read());
   }
-  /*  while (Serial.available() > 0) {
-    char inByte = Serial.read();
-    
-    mySerial.write(inByte);
-  }*/
+
   if (Serial.available()) {
     char inByte = Serial.read();
     mySerial.println(inByte);
