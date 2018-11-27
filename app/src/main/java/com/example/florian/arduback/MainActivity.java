@@ -24,8 +24,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.FileOutputStream;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,9 +32,7 @@ import butterknife.OnItemClick;
 public class MainActivity extends AppCompatActivity {
 
     BluetoothAdapter bluetoothAdapter;
-    public static  FileHandler writer = new FileHandler();
     BluetoothDevicesAdapter bluetoothDevicesAdapter;
-    // Global FileHandler to read and write from/to file
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -98,8 +94,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        writer.init(MainActivity.this);
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);

@@ -84,7 +84,6 @@ public class BluetoothActivity extends AppCompatActivity {
         String message = editText.getText().toString();
         if (message.trim().length() == 0) {
             editText.setError("Enter text first");
-            writeToFile("Bitte");
         } else {
             sendMessage(message);
             editText.setText("");
@@ -94,6 +93,8 @@ public class BluetoothActivity extends AppCompatActivity {
         for(int i = 0; i < receivedVals.size(); i++ ) {
             writeToFile(receivedVals.get(i));
         }
+        // Clear array otherwise values would be added twice
+        receivedVals.clear();
         readFile();
     }
 
