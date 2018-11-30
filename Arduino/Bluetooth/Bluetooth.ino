@@ -35,6 +35,8 @@ SoftwareSerial mySerial(11, 10); // RX, TX
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(57600);
+  // setup vibration motor
+  pinMode(5, OUTPUT);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB port only
   }
@@ -45,10 +47,17 @@ void setup() {
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
 }
+void vibrate(){
+  digitalWrite(5, HIGH);   // vibration(HIGH is the voltage level)
+  delay(1000);             // wait for a second
+  digitalWrite(5, LOW);    // stop vibration by making the voltage LOW
+  delay(1000);  
+}
 
 void loop() { // run over and over
   if (mySerial.available()) {
     Serial.println(mySerial.read());
+    vibrate();
   }
 
   if (Serial.available()) {
@@ -56,12 +65,11 @@ void loop() { // run over and over
     mySerial.println(inByte);
   }
 
-    // put your main code here, to run repeatedly:
-     int value; 
-     value = analogRead(RUBBERCORDPIN);     //Read value
-     //mySerial.print("Analog reading ");  
-     mySerial.println(value);                 //Print value
-     delay(2000);
+   int value; 
+   value = analogRead(RUBBERCORDPIN);     //Read value 
+   mySerial.println(value);               //Print value
+   delay(2000);
+
      
   /*int value = 12345;Serial.read
   String valueS = String(value);

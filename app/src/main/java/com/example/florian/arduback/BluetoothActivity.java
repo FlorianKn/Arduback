@@ -46,6 +46,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.florian.arduback.R.id.RefLabel;
+
 
 public class BluetoothActivity extends AppCompatActivity {
 
@@ -53,9 +55,9 @@ public class BluetoothActivity extends AppCompatActivity {
     BluetoothService bluetoothService;
     BluetoothDevice device;
 
-    @BindView(R.id.edit_text)
+    /*@BindView(R.id.edit_text)
     EditText editText;
-    @BindView(R.id.send_button)
+    @BindView(R.id.send_button)*/
     Button sendButton;
     @BindView(R.id.chat_list_view)
     ListView chatListView;
@@ -72,6 +74,7 @@ public class BluetoothActivity extends AppCompatActivity {
     ChatAdapter chatAdapter;
 
     Snackbar snackTurnOn;
+    public static double REFERENCEVALUE;
 
     private static ArrayList<String> receivedVals = new ArrayList();
     public static  ArrayList<String> historyContent= new ArrayList();
@@ -79,50 +82,50 @@ public class BluetoothActivity extends AppCompatActivity {
     private boolean showMessagesIsChecked = true;
     private boolean autoScrollIsChecked = true;
     public static boolean showTimeIsChecked = true;
+    private boolean btnStatus = true;
 
-    @OnClick(R.id.send_button) void send() {
-        // Send a item_message using content of the edit text widget
-        String message = editText.getText().toString();
-        if (message.trim().length() == 0) {
-            editText.setError("Enter text first");
-        } else {
-            sendMessage(message);
-            editText.setText("");
-        }
+    private void vibrate() {
+        sendMessage("G");
     }
+
     @OnClick(R.id.history) void history() {
         for(int i = 0; i < receivedVals.size(); i++ ) {
-            writeToFile(receivedVals.get(i));
+            writeToFile(receivedVals.get(i), "history");
         }
         // Clear array otherwise values would be added twice
         receivedVals.clear();
-        historyContent = readFile();
-        System.out.println(historyContent);
+        historyContent = readFile("history");
         Intent intent = new Intent(this, HistoryActivity.class);
         startActivity(intent);
+    }
+    @OnClick(R.id.ref) void setReference() {
+        TextView refTextView = (TextView)findViewById(R.id.RefLabel);
+
+        if(btnStatus){
+            refTextView.setText("Press again to set reference");
+            btnStatus = false;
+        } else if (!btnStatus) {
+            refTextView.setText("Set reference");
+            btnStatus = true;
+            writeToFile(receivedVals.get(receivedVals.size()-1), "reference");
+            try {
+                ArrayList<String> ref = readFile("reference");
+                REFERENCEVALUE = Double.parseDouble(ref.get(ref.size() - 1));
+            }catch (Exception e){
+                System.out.println(e);
+            }
+        }
 
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
 
-
         ButterKnife.bind(this);
 
-        editText.setError("Enter text first");
-
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    send();
-                    return true;
-                }
-                return false;
-            }
-        });
+        getReference();
 
         snackTurnOn = Snackbar.make(coordinatorLayout, "Bluetooth turned off", Snackbar.LENGTH_INDEFINITE)
                 .setAction("Turn On", new View.OnClickListener() {
@@ -209,7 +212,7 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
 
-    private static class myHandler extends Handler {
+    private class myHandler extends Handler {
         private final WeakReference<BluetoothActivity> mActivity;
 
         public myHandler(BluetoothActivity activity) {
@@ -257,6 +260,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
                     if (readMessage != null && activity.showMessagesIsChecked) {
                         receivedVals.add(readMessage);
+                        checkValues(readMessage);
                         ChatMessage messageRead = new ChatMessage(activity.device.getName(), readMessage.trim());
                         activity.addMessageToAdapter(messageRead);
 
@@ -333,10 +337,10 @@ public class BluetoothActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void writeToFile(String data){
+    public void writeToFile(String data, String file){
 // Create a file in the Internal Storage
 
-        String fileName = "history";
+        String fileName = file;
 
         FileOutputStream outputStream = null;
         try {
@@ -348,11 +352,11 @@ public class BluetoothActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> readFile(){
+    public ArrayList<String> readFile(String filename){
         BufferedReader input = null;
         File file = null;
         try {
-            file = new File(getFilesDir(), "history"); // Pass getFilesDir() and "MyFile" to read file
+            file = new File(getFilesDir(), filename);
             ArrayList<String> content = new ArrayList<String>();
             input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String line;
@@ -401,6 +405,28 @@ public class BluetoothActivity extends AppCompatActivity {
         reconnectButton.setVisible(false);
         bluetoothService.stop();
         bluetoothService.connect();
+    }
+
+    public void getReference() {
+        try {
+            ArrayList<String> ref = readFile("reference");
+            REFERENCEVALUE = Double.parseDouble(ref.get(ref.size() - 1));
+            System.out.println(REFERENCEVALUE);
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    private void checkValues(String val){
+        try {
+            double inputValue = Double.parseDouble(val);
+            if (inputValue > REFERENCEVALUE + 10) {
+                vibrate();
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
     }
 
 }
