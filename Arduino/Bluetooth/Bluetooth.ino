@@ -29,6 +29,7 @@
 
 #define RESISTOR 10000 //This should be the same value of the used resistor  
 #define RUBBERCORDPIN A0  //This is the pin where the cord is connected tp
+#define RUBBERCORDPINTWO A1  //This is the pin where the cord is connected tp
 
 SoftwareSerial mySerial(11, 10); // RX, TX
 
@@ -66,11 +67,16 @@ void loop() { // run over and over
   }
 
    int value; 
+   int secVal;
    value = analogRead(RUBBERCORDPIN);     //Read value 
-   mySerial.println(value);               //Print value
+   secVal = analogRead(RUBBERCORDPINTWO);
+   
+   mySerial.println(value-secVal);               //Print value
    delay(2000);
-
-     
+   
+   
+   //mySerial.println(secVal);
+   
   /*int value = 12345;Serial.read
   String valueS = String(value);
   mySerial.println(valueS);*/
