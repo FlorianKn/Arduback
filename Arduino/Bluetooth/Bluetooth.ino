@@ -74,12 +74,4 @@ void loop() { // run over and over
    mySerial.println(value-secVal);               //Print value
    delay(2000);
    
-   
-   //mySerial.println(secVal);
-   
-  /*int value = 12345;Serial.read
-  String valueS = String(value);
-  mySerial.println(valueS);*/
-  
-  /*mySerial.println("12345");*/
 }
